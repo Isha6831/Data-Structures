@@ -1,0 +1,89 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+class node 
+{
+    public:
+    string name;
+    int priority;
+    int execTime;
+    node *next;
+
+    //  parameterized constructor
+    node(string taskName, int p, int t) {
+        name = taskName;
+        priority = p;
+        execTime = t;
+        next = NULL;
+    }
+};
+
+int main() 
+{
+    node *head = NULL;  // head pointer initialized
+    node *temp;
+    int n;
+    cout<<"Enter number of tasks to schedule: ";
+    cin>>n;
+    string name;
+    int p, t , i;
+    for ( i=1;i<=n;i++) 
+    {
+        cout<<"\nTask "<< i << " Name: ";
+        cin>>name;
+        cout<<"Priority (higher = more important): ";
+        cin>>p;
+        cout<<"Execution Time (ms): ";
+        cin>>t;
+
+        // To store all the input data in the node:
+        node *newnode = new node(name, p, t);
+
+        // If the linked list is empty
+        if (head==NULL) 
+        { 
+            head=newnode;
+        }
+        //if list is not empty, check the priority order and insert acc
+        else if(newnode->priority > head->priority) 
+        {
+            newnode->next = head;
+            head=newnode;      //reassigning head to the first node
+        }
+        else 
+        {
+            temp=head;
+            while (temp->next!=NULL && temp->next->priority >= newnode->priority) 
+            {
+                temp = temp->next;
+            }
+            newnode->next = temp->next;
+            temp->next = newnode;
+        }
+    }
+    
+    cout << "\nScheduled Tasks (Highest Priority First):\n";
+    temp=head;
+    while(temp != NULL) 
+    {
+        cout << "Task: " << temp->name
+             << ", Priority: " << temp->priority
+             << ", Execution Time: " << temp->execTime << " ms\n";
+        temp = temp->next;
+    }
+
+
+    cout << "\nExecuting Tasks (in order):\n";
+    temp=head;
+    while (temp != NULL) 
+    {
+        cout << "Executing Task '" << temp->name
+             << "' : " << temp->execTime << " ms...\n";
+        temp = temp->next;
+    }
+
+    cout << "\nAll tasks executed.\n";
+
+    return 0;
+}
