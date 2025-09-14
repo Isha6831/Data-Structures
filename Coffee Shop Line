@@ -1,0 +1,91 @@
+#include <iostream>
+using namespace std;
+
+class Queue {
+    static const int max = 10;  // max queue size
+    string arr[max];
+    //static const int max = 10;  // max queue size
+    int front, rear;
+
+public:
+    Queue() {
+        front = -1;
+        rear = -1;
+    }
+
+    // Add (enqueue) new customer
+    void addCustomer(string name) {
+        if (rear == max - 1) {
+            cout << "Queue is full! Cannot add more customers.\n";
+            return;
+        }
+        if (front == -1) front = 0; // first customer
+        arr[++rear] = name;
+        cout << name << " joined the line.\n";
+    }
+
+    // Delete (dequeue) customer
+    void deleteCustomer() {
+        if (front == -1 || front > rear) {
+            cout << "Queue is empty! No customers to serve.\n";
+            return;
+        }
+        cout << arr[front] << " has been served and leaves the line.\n";
+        front++;
+        if (front > rear) { // Reset queue when empty
+            front = -1;
+            rear = -1;
+        }
+    }
+
+    // Show current queue
+    void showqueue() {
+        if (front == -1 || front > rear) {
+            cout << "Queue is empty.\n";
+            return;
+        }
+        cout << "Current Line: ";
+        for (int i = front; i <= rear; i++) {
+            cout << arr[i];
+            if (i < rear) cout << " -> ";
+        }
+        cout << endl;
+    }
+};
+
+int main() {
+    Queue q;
+    int choice;
+    string name;
+
+    do {
+        cout << "\n--- Coffee Shop Menu ---\n";
+        cout << "1. Add Customer (enqeue) \n";
+        cout << "2. Delete Serve Customer (Dequeu) \n";
+        cout << "3. Show Queue\n";
+        cout << "4. Exit\n";
+        cout << "Choose an option: ";
+        cin >> choice;
+
+        switch (choice) {
+            case 1:
+                cout << "Enter customer name: ";
+                cin >> name;
+                q.addCustomer(name);
+                break;
+            case 2:
+                q.deleteCustomer();
+                break;
+            case 3:
+                q.showqueue();
+                break;
+            case 4:
+                cout << "Exit! Thank you!\n";
+                break;
+            default:
+                cout << "Invalid option! please select valid option\n";
+        }
+    } while (choice != 4);
+
+    return 0;
+}
