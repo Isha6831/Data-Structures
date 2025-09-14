@@ -1,0 +1,54 @@
+#include <iostream>
+using namespace std;
+class InsertionSort
+{
+    private:
+    int arr[50];
+    int size,i,j,val;
+    public:
+    void input()
+    {
+        cout<<"Enter number of cards:"<<endl;
+        cin>>size;
+        cout<<"Enter "<<size<<" integers of the card:"<<endl;
+        for(i=0;i<size;i++)
+        {
+            cin>>arr[i];
+            
+        }
+    }
+    void sort()
+    {
+        for(i=1;i<size;i++)
+        {
+            val=arr[i];
+            j=i-1;
+            while(j>=0 && arr[j]>val)
+            {
+                arr[j+1]=arr[j];
+                j--;
+            }
+            arr[j+1]=val;
+        }
+        
+    }
+    void display()
+    {
+        cout<<"\n The sorted cards in ascending order are:"<<endl;
+        for(i=0;i<size;i++)
+        {
+            cout<<arr[i]<<"\t";
+        }
+        cout<<endl;
+        
+        
+    }
+};
+int main()
+{
+    InsertionSort sort;
+    sort.input();
+    sort.sort();
+    sort.display();
+    return 0;
+}
