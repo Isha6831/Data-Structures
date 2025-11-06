@@ -1,0 +1,101 @@
+#include <iostream>
+using namespace std;
+
+#define MAXSIZE 100
+
+char stack[MAXSIZE];
+int top = -1;
+
+bool isempty() 
+{
+    return top < 0;
+}
+bool isfull() 
+{
+    return top == MAXSIZE - 1;
+}
+char gettop() 
+{
+    return stack[top];
+}
+void PUSH(char data) 
+{
+    if (!isfull())
+        stack[++top] = data;
+}
+char POP() 
+{
+    if (!isempty())
+    {
+        return stack[top--];
+    }
+    else
+    {
+        return '\0';
+    }
+}
+int precedence(char op) 
+{
+    if(op == '+' || op == '-') 
+    {
+        return 1;
+    }
+    if(op == '*' || op == '/') 
+    {
+        return 2;
+    }
+    return 0;
+}
+
+void infixToPostfix(char infix[], char postfix[]) 
+{
+    int i = 0, j = 0;
+    char ch;
+    while ((ch = infix[i++]) != '\0') 
+    {
+        if ((ch >= 'A' && ch <= 'Z') || (ch >= '0' && ch <= '9')) 
+        {
+            postfix[j++] = ch;
+        }
+        else if (ch == '+' || ch == '-' || ch == '*' || ch == '/') 
+        {
+            while (!isempty() && precedence(gettop()) >= precedence(ch))
+            {
+                postfix[j++] = POP();
+            }
+            PUSH(ch);
+        }
+        else if (ch == '(') 
+        {
+            PUSH(ch);
+        }
+        else if (ch == ')') 
+        {
+            while (!isempty() && gettop() != '(')
+            {
+                postfix[j++] = POP();
+            }
+            if (!isempty()) 
+            {
+                POP();
+            }
+        }
+    }
+    while (!isempty())
+    {
+        postfix[j++] = POP();
+    }
+    postfix[j] = '\0';
+}
+
+int main() 
+{
+    char infix[MAXSIZE], postfix[MAXSIZE];
+    cout << "Enter infix expression (no spaces): ";
+    cin >> infix;
+
+    infixToPostfix(infix, postfix);
+
+    cout << "Postfix expression: " << postfix << endl;
+    return 0;
+}
