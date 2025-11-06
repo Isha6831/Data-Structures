@@ -1,0 +1,84 @@
+#include <iostream>
+using namespace std;
+
+#define MAX 10   // Maximum number of web pages
+
+int webGraph[MAX][MAX];  // Adjacency matrix for web links
+int visited[MAX];         // To track visited pages
+int queue[MAX];           // Manual queue implementation
+int front = -1, rear = -1;
+
+// Function to add a page to the queue
+void enqueue(int page) {
+    if (rear == MAX - 1)
+        return;
+    if (front == -1)
+        front = 0;
+    queue[++rear] = page;
+}
+
+// Function to remove a page from the queue
+int dequeue() {
+    if (front == -1 || front > rear)
+        return -1;
+    return queue[front++];
+}
+
+// Breadth First Search
+void BFS(int start, int n) 
+{
+    enqueue(start);
+    visited[start] = 1;
+
+    cout << "\nIndexing pages starting from: " << start << endl;
+
+    while (front <= rear)
+ {
+        int current = dequeue();
+        cout << "Indexed page: " << current << endl;
+
+        for (int i = 0; i < n; i++) 
+        {
+            if (webGraph[current][i] == 1 && visited[i] == 0)
+ {
+                enqueue(i);
+                visited[i] = 1;
+            }
+        }
+    }
+}
+
+int main() {
+    int n, links;
+    cout << "Enter number of web pages (max 10): ";
+    cin >> n;
+
+    cout << "Enter number of hyperlinks: ";
+    cin >> links;
+
+    // Initialize adjacency matrix
+    for (int i = 0; i < n; i++)
+        for (int j = 0; j < n; j++)
+            webGraph[i][j] = 0;
+
+    cout << "Enter links (from to):" << endl;
+    for (int i = 0; i < links; i++) {
+        int from, to;
+        cin >> from >> to;
+        webGraph[from][to] = 1; // directed link
+    }
+
+    int start;
+    cout << "Enter seed/start page number: ";
+    cin >> start;
+
+    // Initialize visited array
+    for (int i = 0; i < n; i++)
+        visited[i] = 0;
+
+    BFS(start, n);
+
+    cout << "\nAll reachable pages have been indexed (BFS order)." << endl;
+    return 0;
+}
+
